@@ -6,9 +6,9 @@ namespace BreatheLight.Core.Interfaces
 {
     public interface ILightSequenceDbPersistence
     {
-        int Add(LightSequence model);
-        LightSequence Remove(int id);
-        LightSequence Modify(int id, LightSequence model);
+        Task<int> Add(LightSequence model);
+        Task<LightSequence> Remove(int id);
+        Task<LightSequence> Modify(int id, LightSequence model);
         IEnumerable<LightSequence> Get(params int[] id);
         Task<int> SaveChangeAsync();
     }

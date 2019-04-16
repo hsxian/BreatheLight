@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using BreatheLight.Core.Models;
 
 namespace BreatheLight.Core.Interfaces
@@ -9,6 +10,6 @@ namespace BreatheLight.Core.Interfaces
         void RemoveLightTimePoint(string id);
         void Start();
         void Stop();
-        void RefreshLightTask();
+        Task RefreshLightTask();
     }
 }

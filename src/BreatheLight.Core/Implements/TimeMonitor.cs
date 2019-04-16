@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,19 +59,20 @@ namespace BreatheLight.Core.Implements
             ReadLightTask();
         }
 
-        public void RefreshLightTask()
+        public async Task RefreshLightTask()
         {
             _statuss.Clear();
-            ReadLightTask();
+            await ReadLightTask();
         }
-        private void ReadLightTask()
+        private Task ReadLightTask() => Task.Run(() =>
         {
             var lightTasks = _lightDbPersistence.Get();
             lightTasks
                 .ToList()
                 .ForEach(t => t.ProductionSequenceByOperate()
                     .ForEach(item => AddLightTimePoint(item)));
-        }
+        });
+
         private bool IsArrivalTime(DateTime a, DateTime b)
         {
             var abs = Math.Abs(a.TimeOfDay.TotalMilliseconds - b.TimeOfDay.TotalMilliseconds);

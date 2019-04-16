@@ -57,9 +57,9 @@ namespace BreatheLight.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(LightSequence model)
         {
-            _lightDB.Add(model);
+            await _lightDB.Add(model);
             await _lightDB.SaveChangeAsync();
-            _timeMonitor.RefreshLightTask();
+            await _timeMonitor.RefreshLightTask();
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
@@ -73,18 +73,17 @@ namespace BreatheLight.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, LightSequence model)
         {
-            _lightDB.Modify(id, model);
+            await _lightDB.Modify(id, model);
             await _lightDB.SaveChangeAsync();
-            _timeMonitor.RefreshLightTask();
+            await _timeMonitor.RefreshLightTask();
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            _lightDB.Remove(id);
+            await _lightDB.Remove(id);
             await _lightDB.SaveChangeAsync();
-
-            _timeMonitor.RefreshLightTask();
+            await _timeMonitor.RefreshLightTask();
             return RedirectToAction(nameof(Index));
         }
 

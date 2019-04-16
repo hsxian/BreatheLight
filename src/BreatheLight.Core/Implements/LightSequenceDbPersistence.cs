@@ -17,7 +17,7 @@ namespace BreatheLight.Core.Implements
             _lightdb = lightdb;
         }
 
-        public int Add(LightSequence model)
+        public async Task<int> Add(LightSequence model)
         {
             if (model == null) return -1;
             model.Id = 0;
@@ -25,7 +25,7 @@ namespace BreatheLight.Core.Implements
             {
                 model.Id = _lightdb.LightSequences.Max(t => t.Id) + 1;
             }
-            _lightdb.LightSequences.Add(model);
+            await _lightdb.LightSequences.AddAsync(model);
             return model.Id;
         }
 
@@ -35,7 +35,7 @@ namespace BreatheLight.Core.Implements
             return _lightdb.LightSequences.Where(t => id.Any(any => any.Equals(t.Id))).OrderBy(t => t.StartTime.TimeOfDay).ToList();
         }
 
-        public LightSequence Modify(int id, LightSequence model)
+        public async Task<LightSequence> Modify(int id, LightSequence model) => await Task<LightSequence>.Run(() =>
         {
             var temp = _lightdb.LightSequences.SingleOrDefault(t => t.Id.Equals(id));
             if (temp == null) return null;
@@ -45,15 +45,16 @@ namespace BreatheLight.Core.Implements
             temp.StartTime = model.StartTime;
             temp.EndTime = model.EndTime;
             return model;
-        }
+        });
 
-        public LightSequence Remove(int id)
+
+        public async Task<LightSequence> Remove(int id) => await Task<LightSequence>.Run(() =>
         {
             var item = _lightdb.LightSequences.SingleOrDefault(t => t.Id.Equals(id));
             if (item == null) return null;
             var entity = _lightdb.LightSequences.Remove(item);
             return entity?.Entity;
-        }
-        public Task<int> SaveChangeAsync() => _lightdb.SaveChangesAsync();
+        });
+        public async Task<int> SaveChangeAsync() => await _lightdb.SaveChangesAsync();
     }
 }

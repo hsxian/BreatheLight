@@ -1,0 +1,41 @@
+﻿@using BreatheLight.Core.Models; 
+@model LightSequence 
+@{ ViewData["Title"] ="Create LightSequence"; }
+<!DOCTYPE html>
+<html style="text-align: center;">
+  <head>
+    <title>Add</title>
+  </head>
+  <body>
+    <h1>新增</h1>
+    <form method="post">
+      <div>
+        <label asp-for="StartTime"></label>
+        <input asp-for="StartTime" type="time" />
+        <span asp-validation-for="StartTime"></span>
+      </div>
+      <div>
+        <label asp-for="BrightnessA"></label>
+        <input asp-for="BrightnessA" />
+        <span asp-validation-for="BrightnessA"></span>
+      </div>
+      <div>
+        <label asp-for="EndTime"></label>
+        <input asp-for="EndTime" type="time" />
+        <span asp-validation-for="EndTime"></span>
+      </div>
+      <div>
+        <label asp-for="BrightnessB"></label>
+        <input asp-for="BrightnessB" />
+        <span asp-validation-for="BrightnessB"></span>
+      </div>
+      <div>
+        <label asp-for="BrightnessStep"></label>
+        <input asp-for="BrightnessStep" />
+        <span asp-validation-for="BrightnessStep"></span>
+      </div>
+      <div a sp-validation-summary="All"></div>
+      <button type="submit" name="save" href>保存</button>
+    </form>
+  </body>
+</html>

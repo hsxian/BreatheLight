@@ -1,0 +1,55 @@
+#slider {
+  /*设置滑块下面那条线的样式*/
+  outline: none; /*去掉点击时出现的外边框*/
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; /*这三个是去掉那条线原有的默认样式，划重点！！*/
+  width: 50%;
+  height: 0.3rem;
+  background: orange;
+  /*这三个是设置滑块下面那条线的样式*/
+}
+input[type="range"]::-webkit-slider-thumb {
+  /*::-webkit-slider-thumb是代表给滑块的样式进行变更*/
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; /*//这三个是去掉滑块原有的默认样式，划重点！！*/
+  -webkit-box-shadow: 0 0 2px; /*设置滑块的阴影*/
+  width: 2.6rem;
+  height: 1.6rem;
+  /* background: url("images/js2-d_03.png"); */
+  background-size: cover;
+  /*//这几个是设置滑块的样式*/
+  background: #96df426c;
+}
+/* <!--上面是修改滑块和滑块轨道的样式，下面是左右两边按钮的css样式-- >  */
+.btn-sub {
+  /*这里是左边减按钮的css样式*/
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: url("../Resources/sub.png");
+  /* background: transparent; */
+  background-size: 100%;
+  width: 1.8rem;
+  height: 1.8rem;
+  /* font-size: 40px; */
+  color: #96df42a2;
+}
+.btn-add {
+  /*这里是右边+按钮的css样式*/
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background: url("../Resources/add.png") no-repeat;
+  /* background: transparent; */
+  background-size: 100%;
+  width: 1.8rem;
+  height: 1.8rem;
+  /* font-size: 40px; */
+  color: #96df42a2;
+}
+#slider-div {
+  margin: 100px;
+  background: #96df426c;
+}

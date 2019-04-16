@@ -1,0 +1,56 @@
+﻿@using System.Collections.Generic;
+@using BreatheLight.Core.Models; 
+@model IEnumerable<LightSequence>
+@{ViewData["Title"] = "Home Page"; }
+<!DOCTYPE html>
+<html style="text-align: center;">
+  <script type="text/javascript" src="js/slider.js"></script>
+  <link href="css/slider.css" type="text/css" rel="stylesheet" />
+  <div class="text-center">
+    <h1>呼吸灯调节</h1>
+    <div style="margin:50px 0px;width:100%;">
+      <label>亮度:</label>
+      <input type="text" id="bsLbl" value="@ViewData["brightness"]"/>
+      <button onclick="SetLightBrightness()">设置</button>
+    </div>
+    <div style="margin:50px 0px;width:100%;">
+      <button class="btn-sub" id="btnSub" onclick="less()"></button
+      ><!--减value的按钮-->
+      <input type="range" class="slider-block" id="slider" max="100" min="0"
+      step="0.01" value="@ViewData["brightness"]" onchange="change()"
+      oninput="move()">
+      <button class="btn-add" id="btnAdd" onclick="plus()"></button
+      ><!--加value的按钮-->
+    </div>
+  </div>
+
+  <div style="display:inline;text-align: center;">
+    <h3>任务列表：<a href="/Home/Create" style="font-size: 20px;">添加</a></h3>
+  </div>
+  <table border="1" align="center">
+    <tr style="text-align: center;">
+      <th>开始</th>
+      <th>亮度A</th>
+      <th>结束</th>
+      <th>亮度B</th>
+      <th>步长</th>
+      <th>操作</th>
+    </tr>
+    @foreach (var item in @Model) {
+    <tr>
+      <td>@item.StartTime.ToShortTimeString()</td>
+      <td>@item.BrightnessA</td>
+      <td>@item.EndTime.ToShortTimeString()</td>
+      <td>@item.BrightnessB</td>
+      <td>@item.BrightnessStep</td>
+      <td>
+        <div style="display:inline;">
+          <a href="/Home/Edit/@item.Id">编辑</a>
+          <a href="/Home/Remove/@item.Id">删除</a>
+        </div>
+      </td>
+    </tr>
+    }
+    <tr></tr>
+  </table>
+</html>

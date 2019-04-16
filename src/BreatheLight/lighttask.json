@@ -1,0 +1,1 @@
+[{"Id":1,"BrightnessA":2.0,"BrightnessB":100.0,"BrightnessStep":0.4,"StartTime":"0001-01-01T06:30:00","EndTime":"0001-01-01T07:00:00"},{"Id":2,"BrightnessA":100.0,"BrightnessB":2.0,"BrightnessStep":0.4,"StartTime":"0001-01-01T07:30:00","EndTime":"0001-01-01T08:00:00"}]

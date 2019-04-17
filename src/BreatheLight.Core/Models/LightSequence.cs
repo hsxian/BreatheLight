@@ -55,7 +55,7 @@ namespace BreatheLight.Core.Models
                 };
                 if ((ls.Time - lastTime).TotalMilliseconds < 1) continue;
                 lastTime = ls.Time;
-                Console.WriteLine($"time:{ls.Time}, light: {ls.Brightness}");
+                //Console.WriteLine($"time:{ls.Time}, light: {ls.Brightness}");
                 result.Add(ls);
             }
             #endregion

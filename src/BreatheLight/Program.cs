@@ -18,16 +18,8 @@ namespace BreatheLight
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            if (!File.Exists("appsettings.json"))
-            {
-                throw new FileNotFoundException();
-            }
-            var host = WebHost.CreateDefaultBuilder(args)
-                //.UseUrls("http://localhost:4567")
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
-            return host;
-        }
     }
 }

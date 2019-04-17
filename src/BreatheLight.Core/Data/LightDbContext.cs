@@ -51,6 +51,11 @@ namespace BreatheLight.Core.Data
                 }
             };
             modelBuilder.Entity<LightSequence>().HasData(lists);
+            modelBuilder.Entity<LightStatus>().HasData(new LightStatus
+            {
+                Id = "-1",
+                Brightness = 9,
+            });
         }
         public DbSet<LightStatus> LightStatuses { get; set; }
         public DbSet<LightSequence> LightSequences { get; set; }

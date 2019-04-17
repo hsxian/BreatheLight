@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Threading;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -40,7 +41,7 @@ namespace BreatheLight
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -69,63 +70,32 @@ namespace BreatheLight
             });
 
             #region 手动注册
-            services.AddScoped<IPwmRegulator, PwmRegulator>();
-            services.AddScoped<ISystemCommander, SystemCommander>();
+            // services.AddScoped<IPwmRegulator, PwmRegulator>();
+            // services.AddScoped<ISystemCommander, SystemCommander>();
 
-            services.AddSingleton<ITimeMonitor, TimeMonitor>();
-            services.AddScoped<ILightRegulator, LightRegulator>();
-            services.AddScoped<ILightSequenceDbPersistence, LightSequenceDbPersistence>();
+            // services.AddSingleton<ITimeMonitor, TimeMonitor>();
+            // services.AddScoped<ILightRegulator, LightRegulator>();
+            // services.AddScoped<ILightSequenceDbPersistence, LightSequenceDbPersistence>();
             #endregion
 
             #region autofac自动注册
 
+            var builder = new ContainerBuilder();//实例化 AutoFac  容器   
 
-            //var builder = new ContainerBuilder();//实例化 AutoFac  容器   
+            var assemblys = new List<string>() { "UpPwm", "BreatheLight.Core" }.Select(t => Assembly.Load(t)).ToArray();
+            builder.RegisterAssemblyTypes(assemblys)
+                .Where(w => !w.Name.Contains("TimeMonitor"))
+                .AsImplementedInterfaces();
 
-            // var config = new ConfigurationBuilder();
-            // config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            //             .AddJsonFile($"appsettings.{_hostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-            //             ;
-            // var containerBuilder = new ContainerBuilder();
+            builder.RegisterType<TimeMonitor>().As<ITimeMonitor>().SingleInstance();
 
-            // // Register the ConfigurationModule with Autofac.
-            // var configurationModule = new ConfigurationModule(config.Build());
+            builder.Populate(services);
+            ApplicationContainer = builder.Build();
 
-            // builder.RegisterModule(configurationModule);
-            // _appConfiguration = configurationModule.Configuration;
+            ApplicationContainer.Resolve<ITimeMonitor>().Start();
+            var sp = new AutofacServiceProvider(ApplicationContainer);//第三方IOC接管 core内置DI容器
 
-            //var assemblys = new List<string>() { "UpPwm", "BreatheLight.Core" }.Select(t => Assembly.Load(t)).ToArray();
-            // builder.RegisterAssemblyTypes(assemblys)
-            //     .Where(w => !w.Name.Contains("TimeMonitor"))
-            //     .AsImplementedInterfaces();
-
-            #region Name
-            // // 首先注册 options，供 DbContext 服务初始化使用
-            // builder.Register(c =>
-            // {
-            //     var optionsBuilder = new DbContextOptionsBuilder<LightDbContext>();
-            //     optionsBuilder.UseSqlite(connection, b => b
-            //         .MigrationsAssembly("BreatheLight.Core"));
-            //     return optionsBuilder.Options;
-            // }).InstancePerLifetimeScope();
-            // // 注册 DbContext
-            // builder.RegisterType<LightDbContext>()
-            //     .AsSelf()
-            //     .InstancePerLifetimeScope();
-            #endregion
-
-
-
-            //builder.RegisterInstance(configurationModule);
-            //builder.RegisterType<TimeMonitor>().As<ITimeMonitor>().SingleInstance();
-            //builder.RegisterType<HomeController>().PropertiesAutowired();
-            //services.AddHostedService<TimedHostedService>();
-            //builder.Populate(services);
-            //ApplicationContainer = builder.Build();
-            //ApplicationContainer.Resolve<ITimeMonitor>().Start();
-            //var sp = new AutofacServiceProvider(ApplicationContainer);//第三方IOC接管 core内置DI容器
-
-            //return sp;
+            return sp;
             #endregion
         }
 

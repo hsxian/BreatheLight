@@ -16,37 +16,31 @@ namespace BreatheLight.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IMemoryCache _cache;
         private readonly ILightSequenceDbPersistence _lightsDb;
         private readonly ILightRegulator _lightRegulator;
         private readonly ITimeMonitor _timerMonitor;
 
         public HomeController(
-            IMemoryCache memoryCache,
             ILightSequenceDbPersistence lightsDb,
             ILightRegulator lightRegulator,
             ITimeMonitor timerMonitor
             )
         {
-            _cache = memoryCache;
             _lightsDb = lightsDb;
             _lightRegulator = lightRegulator;
             _timerMonitor = timerMonitor;
         }
         public async Task<IActionResult> Index()
         {
-            var ca = _cache.GetOrCreate("brightness", t =>
-            {
-                return t.Value = 9;
-            });
-            ViewData["brightness"] = ca;
+            ViewData["brightness"] = await _lightsDb.GetBrightness();
+
             var lights = await _lightsDb.Get();
             return View(lights);
         }
         public void SetLightBrightness(float brightness)
         {
+            _lightsDb.SetBrightness(brightness);
             _lightRegulator.SetLightBrightness(brightness);
-            _cache.Set("brightness", brightness);
         }
 
 

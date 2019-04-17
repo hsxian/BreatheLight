@@ -36,6 +36,23 @@ namespace BreatheLight.Core.Implements
             return _lightdb.LightSequences.Where(t => id.Any(any => any.Equals(t.Id))).OrderBy(t => t.StartTime.TimeOfDay).ToList();
         });
 
+        public async Task<float> GetBrightness() => await Task.Run(() =>
+        {
+            var item = _lightdb.LightStatuses.FirstOrDefault(t => t.Id.Equals("-1"));
+            if (item == null)
+            {
+                item = new LightStatus
+                {
+                    Id = "-1",
+                    Brightness = 9
+                };
+                _lightdb.LightStatuses.AddAsync(item);
+                _lightdb.SaveChangesAsync();
+            }
+            return item.Brightness;
+        });
+
+
         public async Task<LightSequence> Modify(int id, LightSequence model) => await Task<LightSequence>.Run(async () =>
         {
             var temp = _lightdb.LightSequences.SingleOrDefault(t => t.Id.Equals(id));
@@ -59,5 +76,11 @@ namespace BreatheLight.Core.Implements
             return entity?.Entity;
         });
         public async Task<int> SaveChangeAsync() => await _lightdb.SaveChangesAsync();
+
+        public async Task SetBrightness(float br)
+        {
+            _lightdb.LightStatuses.FirstOrDefault(t => t.Id.Equals("-1")).Brightness = br;
+            await _lightdb.SaveChangesAsync();
+        }
     }
 }

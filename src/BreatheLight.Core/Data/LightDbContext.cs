@@ -12,7 +12,7 @@ namespace BreatheLight.Core.Data
 {
     public class LightDbContext : DbContext
     {
-
+        public LightDbContext() { }
         public LightDbContext(DbContextOptions<LightDbContext> options)
             : base(options)
         {

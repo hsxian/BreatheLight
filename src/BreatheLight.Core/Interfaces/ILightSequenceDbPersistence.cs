@@ -9,7 +9,6 @@ namespace BreatheLight.Core.Interfaces
         Task<int> Add(LightSequence model);
         Task<LightSequence> Remove(int id);
         Task<LightSequence> Modify(int id, LightSequence model);
-        IEnumerable<LightSequence> Get(params int[] id);
-        Task<int> SaveChangeAsync();
+        Task<IEnumerable<LightSequence>> Get(params int[] id);
     }
 }

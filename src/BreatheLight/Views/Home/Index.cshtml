@@ -1,6 +1,6 @@
-﻿@using System.Collections.Generic;
-@using BreatheLight.Core.Models; 
-@model IEnumerable<LightSequence>
+﻿@using System.Collections.Generic; 
+@using BreatheLight.Core.Models;
+@model IEnumerable<LightSequence>;
 @{ViewData["Title"] = "Home Page"; }
 <!DOCTYPE html>
 <html style="text-align: center;">
@@ -25,7 +25,12 @@
   </div>
 
   <div style="display:inline;text-align: center;">
-    <h3>任务列表：<a href="/Home/Create" style="font-size: 20px;">添加</a></h3>
+    <h3>
+      任务列表：
+      <a href="/Home/Create" style="font-size: 20px;">添加</a>
+      <a href="/Home/Distribute" style="font-size: 20px;">发布</a>
+      <a href="/Home/UnDistribute" style="font-size: 20px;">取消</a>
+    </h3>
   </div>
   <table border="1" align="center">
     <tr style="text-align: center;">

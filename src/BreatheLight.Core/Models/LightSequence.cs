@@ -7,7 +7,7 @@ namespace BreatheLight.Core.Models
     public class LightSequence
     {
         public int Id { get; set; }
-        [Display(Name = "亮度2"), Range(0f, 100f)]
+        [Display(Name = "亮度A"), Range(0f, 100f)]
         public float BrightnessA { get; set; }
         [Display(Name = "亮度B"), Range(0f, 100f)]
         public float BrightnessB { get; set; }
@@ -34,6 +34,16 @@ namespace BreatheLight.Core.Models
                 getTime = i => EndTime.AddSeconds(i * intervel);
             }
             //Console.WriteLine($"st: {StartTime}, et: {EndTime}");
+            #region first item
+            var first = new LightStatus
+            {
+                Id = Guid.NewGuid().ToString(),
+                Time = StartTime,
+                Brightness = a
+            };
+            result.Add(first);
+            #endregion
+            #region auto generate items
             DateTime lastTime = StartTime;
             for (float i = a; jude(i); i += step)
             {
@@ -43,11 +53,13 @@ namespace BreatheLight.Core.Models
                     Time = getTime(i),
                     Brightness = i
                 };
-                if ((ls.Time - lastTime).TotalMilliseconds < 10) continue;
+                if ((ls.Time - lastTime).TotalMilliseconds < 1) continue;
                 lastTime = ls.Time;
                 Console.WriteLine($"time:{ls.Time}, light: {ls.Brightness}");
                 result.Add(ls);
             }
+            #endregion
+            #region last item
             var last = new LightStatus
             {
                 Id = Guid.NewGuid().ToString(),
@@ -55,6 +67,7 @@ namespace BreatheLight.Core.Models
                 Brightness = b
             };
             result.Add(last);
+            #endregion
             return result;
         }
     }

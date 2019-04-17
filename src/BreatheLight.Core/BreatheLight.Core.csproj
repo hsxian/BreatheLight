@@ -6,6 +6,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="*"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="*"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="*"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="*"/>   
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>

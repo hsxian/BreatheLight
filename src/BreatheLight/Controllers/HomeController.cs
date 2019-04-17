@@ -10,36 +10,37 @@ using System.Timers;
 using Microsoft.Extensions.Caching.Memory;
 using BreatheLight.Core.Data;
 using BreatheLight.Core.Models;
+using BreatheLight.Core.Implements;
 
 namespace BreatheLight.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILightRegulator _lightRegulator;
         private readonly IMemoryCache _cache;
-        private readonly ILightSequenceDbPersistence _lightDB;
-        private readonly ITimeMonitor _timeMonitor;
+        private readonly ILightSequenceDbPersistence _lightsDb;
+        private readonly ILightRegulator _lightRegulator;
+        private readonly ITimeMonitor _timerMonitor;
 
         public HomeController(
-            ILightRegulator lightRegulator,
             IMemoryCache memoryCache,
-            ILightSequenceDbPersistence lightDB,
-            ITimeMonitor timeMonitor
+            ILightSequenceDbPersistence lightsDb,
+            ILightRegulator lightRegulator,
+            ITimeMonitor timerMonitor
             )
         {
-            _lightRegulator = lightRegulator;
             _cache = memoryCache;
-            _lightDB = lightDB;
-            _timeMonitor = timeMonitor;
+            _lightsDb = lightsDb;
+            _lightRegulator = lightRegulator;
+            _timerMonitor = timerMonitor;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var ca = _cache.GetOrCreate("brightness", t =>
             {
                 return t.Value = 9;
             });
             ViewData["brightness"] = ca;
-            var lights = _lightDB.Get();
+            var lights = await _lightsDb.Get();
             return View(lights);
         }
         public void SetLightBrightness(float brightness)
@@ -57,15 +58,13 @@ namespace BreatheLight.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(LightSequence model)
         {
-            await _lightDB.Add(model);
-            await _lightDB.SaveChangeAsync();
-            await _timeMonitor.RefreshLightTask();
+            await _lightsDb.Add(model);
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var item = _lightDB.Get(id).SingleOrDefault();
+            var item = (await _lightsDb.Get(id))?.SingleOrDefault();
             if (item == null) return RedirectToAction(nameof(Index));
 
             return View(item);
@@ -73,17 +72,25 @@ namespace BreatheLight.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(int id, LightSequence model)
         {
-            await _lightDB.Modify(id, model);
-            await _lightDB.SaveChangeAsync();
-            await _timeMonitor.RefreshLightTask();
+            await _lightsDb.Modify(id, model);
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            await _lightDB.Remove(id);
-            await _lightDB.SaveChangeAsync();
-            await _timeMonitor.RefreshLightTask();
+            await _lightsDb.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public async Task<IActionResult> Distribute(int id)
+        {
+            await _timerMonitor.RefreshLightTask(await _lightsDb.Get());
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        public async Task<IActionResult> UnDistribute(int id)
+        {
+            await _timerMonitor.RefreshLightTask(new List<LightSequence>());
             return RedirectToAction(nameof(Index));
         }
 

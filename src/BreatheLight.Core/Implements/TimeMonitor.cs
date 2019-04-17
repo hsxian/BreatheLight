@@ -9,35 +9,37 @@ using BreatheLight.Core.Interfaces;
 using BreatheLight.Core.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using BreatheLight.Implements;
+using UpPwm.Implements;
 
 namespace BreatheLight.Core.Implements
 {
     public class TimeMonitor : ITimeMonitor
     {
-        private List<LightStatus> _statuss;
+        private readonly List<LightStatus> _statuss;
         private readonly ILightRegulator _light;
-        private readonly ILightSequenceDbPersistence _lightDbPersistence;
         private readonly IConfiguration _configuration;
-        private Timer _timer;
+        private readonly Timer _timer;
         private int _timeInterval = 10;
         private readonly string _logFileName;
         private DateTime _zeroOfDay = new DateTime(1, 1, 1, 0, 0, 0);
-
-        public TimeMonitor(ILightRegulator light,
-         ILightSequenceDbPersistence lightDbPersistence,
-         IConfiguration configuration
-         )
+        public TimeMonitor(
+            IConfiguration configuration
+        )
         {
-            _light = light;
-            _lightDbPersistence = lightDbPersistence;
+            _statuss = new List<LightStatus>();
+            _light = new LightRegulator(new PwmRegulator(), configuration);
             _configuration = configuration;
             if (int.TryParse(_configuration["UpTimer:TimeInterval"], out int interver))
             {
                 _timeInterval = interver;
             }
             _logFileName = _configuration["Logging:FileName"];
-            _statuss = new List<LightStatus>();
             _timer = new Timer(_timeInterval);
+            ConfigTimer();
+        }
+        private void ConfigTimer()
+        {
             _timer.Enabled = true;
             _timer.Elapsed += (sen, e) =>
             {
@@ -56,18 +58,16 @@ namespace BreatheLight.Core.Implements
                     File.Move(_logFileName, $"{DateTime.Now.AddDays(-1).ToShortDateString()}-{_logFileName}");
                 }
             };
-            ReadLightTask();
-        }
 
-        public async Task RefreshLightTask()
+        }
+        public async Task RefreshLightTask(IEnumerable<LightSequence> lights)
         {
             _statuss.Clear();
-            await ReadLightTask();
+            await ReadLightTask(lights);
         }
-        private Task ReadLightTask() => Task.Run(() =>
+        private async Task ReadLightTask(IEnumerable<LightSequence> lights) => await Task.Run(() =>
         {
-            var lightTasks = _lightDbPersistence.Get();
-            lightTasks
+            lights?
                 .ToList()
                 .ForEach(t => t.ProductionSequenceByOperate()
                     .ForEach(item => AddLightTimePoint(item)));

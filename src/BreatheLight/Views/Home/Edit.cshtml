@@ -1,46 +1,43 @@
-@using BreatheLight.Core.Models;
-
-@model LightSequence
-@{
-    ViewData["Title"] = "Edit LightSequence";
-}   
+@using BreatheLight.Core.Models; 
+@model LightSequence ; 
+@{ ViewData["Title"]="Edit LightSequence"; }
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Edit</title>
-    </head>
-    <body>
-        <h1>编辑</h1>
-        <form method="post">
-            <div>
-                <label asp-for="StartTime"></label>
-                <input asp-for="StartTime" type="time"/>
-                <span asp-validation-for="StartTime"></span>
-            </div>
-            <div>
-                <label asp-for="BrightnessA"></label>
-                <input asp-for="BrightnessA"/>
-                <span asp-validation-for="BrightnessA"></span>
-            </div>
-            <div>
-                <label asp-for="EndTime"></label>
-                <input asp-for="EndTime" type="time"/>
-                <span asp-validation-for="EndTime"></span>
-            </div>
-             <div>
-                <label asp-for="BrightnessB"></label>
-                <input asp-for="BrightnessB"/>
-                <span asp-validation-for="BrightnessB"></span>
-            </div>
-            <div>
-                <label asp-for="BrightnessStep"></label>
-                <input asp-for="BrightnessStep"/>
-                <span asp-validation-for="BrightnessStep"></span>
-            </div>
+<html style="text-align: center;">
+  <head>
+    <title>Edit</title>
+  </head>
+  <body>
+    <h1>编辑</h1>
+    <form method="post">
+      <div>
+        <label asp-for="StartTime"></label>
+        <input asp-for="StartTime" type="time" />
+        <span asp-validation-for="StartTime"></span>
+      </div>
+      <div>
+        <label asp-for="BrightnessA"></label>
+        <input asp-for="BrightnessA" />
+        <span asp-validation-for="BrightnessA"></span>
+      </div>
+      <div>
+        <label asp-for="EndTime"></label>
+        <input asp-for="EndTime" type="time" />
+        <span asp-validation-for="EndTime"></span>
+      </div>
+      <div>
+        <label asp-for="BrightnessB"></label>
+        <input asp-for="BrightnessB" />
+        <span asp-validation-for="BrightnessB"></span>
+      </div>
+      <div>
+        <label asp-for="BrightnessStep"></label>
+        <input asp-for="BrightnessStep" />
+        <span asp-validation-for="BrightnessStep"></span>
+      </div>
 
-            <div a sp-validation-summary="All"></div>
+      <div a sp-validation-summary="All"></div>
 
-            <button type="submit" name="Edit">保存</button>
-        </form>
-    </body>
+      <button type="submit" name="Edit">保存</button>
+    </form>
+  </body>
 </html>

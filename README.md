@@ -12,11 +12,12 @@
 
 简单使用：
 
-1. 安装[.NET Core SDK](https://dotnet.microsoft.com/download)
-2. 修改Pwm波需要root权限，所以请在root下运行该项目:`sudo -i`,输入密码。
-3. 进入项目目录: `cd ./src/BreatheLight/`。
-4. 在配置文件中有Up Board对应的pwm发生端口配置和pwm波特率配置，应将其修改为您的对应配置。
-5. 运行：`dotnet run`。
+1. 安装[kernel for up board](https://wiki.up-community.org/Setup)
+2. 安装[.NET Core SDK](https://dotnet.microsoft.com/download)
+3. 修改Pwm波需要root权限，所以请在root下运行该项目:`sudo -i`,输入密码。
+4. 进入项目目录: `cd ./src/BreatheLight/`。
+5. 在配置文件中有Up Board对应的pwm发生端口配置和pwm波特率配置，应将其修改为您的对应配置。
+6. 运行：`dotnet run`。
 
 如需使用发布版本：
 
